@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Layanan Fotografi Profesional</title>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .nav.scrolled {
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.98);
+        }
+
+        .nav a {
+            color: #333;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav a:hover {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e53);
+            color: white;
+        }
+
+        header {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('./image/foto17.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            position: relative;
+            padding-top: 60px;
+        }
+
+        h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            animation: fadeInDown 1s ease-out;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e53);
+            color: white;
+            padding: 15px 35px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #ff8e53, #ff6b6b);
+        }
+
+        section {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        #about {
+            background: white;
+            border-radius: 15px;
+            margin-top: -50px;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 40px;
+        }
+
+        .services {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            padding: 20px 0;
+        }
+
+        .service {
+            background: white;
+            padding: 0;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            height: 450px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .service-img-container {
+            height: 250px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .service-img-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e53);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+            z-index: 1;
+        }
+
+        .service:hover .service-img-container::before {
+            transform: scaleX(1);
+        }
+
+        .service img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .service-content {
+            padding: 25px;
+            background: white;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.3s ease;
+        }
+
+        .service h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .service h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 2px;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e53);
+            transition: width 0.3s ease;
+        }
+
+        .service:hover h3::after {
+            width: 100px;
+        }
+
+        .service p {
+            color: #666;
+            font-size: 0.95em;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .service:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .service:hover img {
+            transform: scale(1.1) rotate(2deg);
+        }
+
+        .service:hover .service-content {
+            transform: translateY(-5px);
+        }
+
+        .pricing-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .pricing-table th, .pricing-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .pricing-table th {
+            background-color: #ff6b6b;
+            color: white;
+        }
+
+        .portfolio {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            padding: 20px 0;
+        }
+
+        .portfolio-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            height: 300px;
+        }
+
+        .portfolio-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.7));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .portfolio-item:hover::before {
+            opacity: 1;
+        }
+
+        .portfolio-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e53);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .portfolio-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .testimonials {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 40px;
+            background: transparent;
+            box-shadow: none;
+        }
+
+        .testimonial-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: left;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 60px;
+            color: #ff6b6b;
+            opacity: 0.2;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            font-size: 1.1em;
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .testimonial-author img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+            object-fit: cover;
+        }
+
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .author-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .author-title {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: #333;
+            color: white;
+            margin-top: 50px;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav {
+                padding: 15px;
+            }
+            .nav a {
+                padding: 8px 15px;
+                font-size: 0.9em;
+            }
+            h1 {
+                font-size: 2.5em;
+            }
+            h2 {
+                font-size: 1.5em;
+            }
+            .services {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="nav">
+    <a href="#about" data-aos="fade-down" data-aos-delay="100">Tentang kami</a>
+    <a href="#services" data-aos="fade-down" data-aos-delay="200"> Layanan</a>
+    <a href="#portfolio" data-aos="fade-down" data-aos-delay="300">Karya kami</a>
+    <a href="#testimonials" data-aos="fade-down" data-aos-delay="400">Testimoni</a>
+</nav>
+
+<header>
+    <h1 data-aos="fade-down">Layanan Fotografi Profesional & Desain Grafis Berkualitas Tinggi</h1>
+    <h2 data-aos="fade-up">Mengabadikan Momen Hidup & Meningkatkan Identitas Visual Anda</h2>
+    <a href="booking.htm" class="cta-button" data-aos="fade">Jadwalkan Sesi Anda</a>
+</header>
+
+<section id="about" data-aos="fade-up">
+    <h2>Kenali Arsipro</h2>
+<p style="font-size: 1.5em;">Hai, kami adalah Arsipro Art & Design, tim fotografer dan desainer grafis yang penuh semangat dengan pengalaman lebih dari 6 tahun. Kami berfokus pada mengabadikan momen-momen berharga dan menciptakan karya visual yang memukau untuk menceritakan kisah Anda.</p>
+
+<section id="services">
+    <h2 data-aos="fade-up">Layanan yang Kami Hadirkan</h2>
+    <div class="services">
+        <div class="service" data-aos="fade-up" data-aos-delay="100">
+            <div class="service-img-container">
+                <img src="./image/foto11.jpg" alt="Fotografi">
+            </div>
+            <div class="service-content">
+                <h3>Fotografi</h3>
+                <p>Menyajikan foto profesional untuk setiap momen berharga dengan kualitas terbaik dan hasil yang memuaskan.</p>
+            </div>
+        </div>
+        <div class="service" data-aos="fade-up" data-aos-delay="200">
+            <div class="service-img-container">
+                <img src="./image/foto10.jpg" alt="Videografi">
+            </div>
+            <div class="service-content">
+                <h3>Videografi</h3>
+                <p>Mengabadikan cerita visual melalui sinematografi yang memukau dengan teknik profesional.</p>
+            </div>
+        </div>
+        <div class="service" data-aos="fade-up" data-aos-delay="300">
+            <div class="service-img-container">
+                <img src="./image/foto12.jpg" alt="Editing & Retouching">
+            </div>
+            <div class="service-content">
+                <h3>Editing & Retouching</h3>
+                <p>Meningkatkan kualitas visual dengan sentuhan editing dan retouching yang sempurna.</p>
+            </div>
+        </div>
+        <div class="service" data-aos="fade-up" data-aos-delay="400">
+            <div class="service-img-container">
+                <img src="./image/foto13.jpg" alt="Desain Grafis">
+            </div>
+            <div class="service-content">
+                <h3>Desain Grafis</h3>
+                <p>Menciptakan desain grafis yang inovatif dan memikat untuk kebutuhan visual Anda.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="portfolio">
+    <h2 data-aos="fade-up">Karya Kami</h2>
+    <div class="portfolio">
+        <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="100">
+            <img src="image/foto2.jpg.jpg" alt="Portfolio Image" />
+        </div>
+        <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="200">
+            <img src="image/foto3.jpg.jpg" alt="Portfolio Image" />
+        </div>
+        <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="300">
+            <img src="image/foto4.jpg.jpg" alt="Portfolio Image" />
+        </div>
+        <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="400">
+            <img src="image/foto5.jpg" alt="Portfolio Image" />
+        </div>
+        <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="500">
+            <img src="image/foto6.jpg" alt="Portfolio Image" />
+        </div>
+        <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="600">
+            <img src="image/foto7.jpg" alt="Portfolio Image" />
+        </div>
+        <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="700">
+            <img src="image/foto14.jpg" alt="Portfolio Image" />
+        </div>
+        <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="800">
+            <img src="image/foto15.jpg" alt="Portfolio Image" />
+        </div>
+        <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="900">
+            <img src="image/foto16.jpg" alt="Portfolio Image" />
+        </div>
+        <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="1000">
+            <img src="image/foto18.jpg" alt="Portfolio Image" />
+        </div>
+        <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="1100">
+            <img src="image/foto19.jpg" alt="Portfolio Image" />
+        </div>
+        <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="1200">
+            <img src="image/foto20.jpg" alt="Portfolio Image" />
+        </div>
+        <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="1300">
+            <img src="image/foto21.jpg" alt="Portfolio Image" />
+        </div>
+        <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="1400">
+            <img src="image/foto22.jpg" alt="Portfolio Image" />
+        </div>
+        <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="1500">
+            <img src="image/foto23.jpg" alt="Portfolio Image" />
+        </div>
+    </div>
+</section>
+
+<section id="testimonials" data-aos="fade-up">
+    <h2>Testimoni Klien</h2>
+    <div class="testimonials">
+        <div class="testimonial-card" data-aos="fade-up" data-aos-delay="100">
+            <p class="testimonial-text">"Tim fotografer sangat profesional dan hasil fotonya luar biasa! Sangat memuaskan dan sesuai dengan ekspektasi kami."</p>
+            <div class="testimonial-author">
+                <img src="./image/foto8.jpg" alt="Sarah Wijaya">
+                <div class="author-info">
+                    <span class="author-name">Sarah Wijaya</span>
+                    <span class="author-title">Wedding Client</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="testimonial-card" data-aos="fade-up" data-aos-delay="200">
+            <p class="testimonial-text">"Bekerja sama dengan Arsipro adalah pengalaman yang luar biasa! Foto-fotonya benar-benar menangkap momen spesial kami dengan sempurna."</p>
+            <div class="testimonial-author">
+                <img src="./Testimonial image/testimoni 1.jpg" alt="John Doe">
+                <div class="author-info">
+                    <span class="author-name">John Doe</span>
+                    <span class="author-title">Corporate Event Client</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="testimonial-card" data-aos="fade-up" data-aos-delay="300">
+            <p class="testimonial-text">"Arsipro sangat menghadirkan hasil yang inovatif dan memuaskan! Kami sangat mengutamakan kualitas fotonya."</p>
+            <div class="testimonial-author">
+                <img src="./Testimonial image/testimoni 2.jpg" alt="David Kumar">
+                <div class="author-info">
+                    <span class="author-name">David Kumar</span>
+                    <span class="author-title">Product Photography Client</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="testimonial-card" data-aos="fade-up" data-aos-delay="400">
+            <p class="testimonial-text">"Kami sangat puas dengan hasil-fotonya yang kami dapatkan. Kami sangat senang dengan hasil-fotonya yang kami dapat."</p>
+            <div class="testimonial-author">
+                <img src="./Testimonial image/testimoni 3.jpg" alt="Ayunda Melinda">
+                <div class="author-info">
+                    <span class="author-name">Ayunda Melinda</span>
+                    <span class="author-title">Family Portrait Client</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="testimonial-card" data-aos="fade-up" data-aos-delay="500">
+            <p class="testimonial-text">"Hasilnya melebihi ekspektasi! Arsipro sangat memahami kebutuhan kami dan mampu merealisasikannya dengan sempurna."</p>
+            <div class="testimonial-author">
+                <img src="./Testimonial image/testimoni 4.jpg" alt="Fikri Wijaya">
+                <div class="author-info">
+                    <span class="author-name">Fikri Wijaya</span>
+                    <span class="author-title">Pre-wedding Client</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="testimonial-card" data-aos="fade-up" data-aos-delay="600">
+            <p class="testimonial-text">"Profesional, kreatif, dan sangat berbakat! Arsipro berhasil menangkap emosi di setiap foto. Luar biasa!"</p>
+            <div class="testimonial-author">
+                <img src="./Testimonial image/testimoni 5.jpg" alt="Emily Watson">
+                <div class="author-info">
+                    <span class="author-name">Emily Watson</span>
+                    <span class="author-title">Commercial Client</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="testimonial-card" data-aos="fade-up" data-aos-delay="700">
+            <p class="testimonial-text">"Sangat puas dengan hasil kerjanya! Setiap foto terlihat indah dan bermakna. Tidak sabar untuk bekerja sama lagi di masa depan."</p>
+            <div class="testimonial-author">
+                <img src="./Testimonial image/testimoni 6.jpg" alt="Richard Smith">
+                <div class="author-info">
+                    <span class="author-name">Richard Smith</span>
+                    <span class="author-title">Event Photography Client</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+    </div>
+</section>
+
+<footer>
+    <p>&copy; 2024 Arsipro Art & Design. All rights reserved.</p>
+</footer>
+
+<div class="scroll-top">
+    <i class="fas fa-arrow-up"></i>
+</div>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<script>
+    AOS.init({
+        duration: 1000,
+        once: true,
+        offset: 100
+    });
+
+    // Scroll effects
+    window.addEventListener('scroll', function() {
+        const nav = document.querySelector('.nav');
+        const scrollTop = document.querySelector('.scroll-top');
+        
+        if (window.scrollY > 100) {
+            nav.classList.add('scrolled');
+            scrollTop.classList.add('visible');
+        } else {
+            nav.classList.remove('scrolled');
+            scrollTop.classList.remove('visible');
+        }
+    });
+
+    // Smooth scroll to top
+    document.querySelector('.scroll-top').addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    // Smooth scroll for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
